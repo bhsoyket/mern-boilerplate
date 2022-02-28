@@ -72,4 +72,14 @@ const authenticateRequest = async (req, res, next) => {
     }
 }
 
-module.exports = { handleError, handleRequest, handleValidation, authenticateRequest }
+const authorizeRequest = async (req, res, next) => {
+    let user = req.user;
+    if (user && user.role === 'superadmin') {
+        next();
+    }
+    else {
+        res.status(403).send({ error: 'Unauthorized request' });
+    }
+}
+
+module.exports = { handleError, handleRequest, handleValidation, authenticateRequest, authorizeRequest }
